@@ -1,0 +1,5 @@
+type Event {
+  id: Int!
+  title: String!
+  notes: String
+}
