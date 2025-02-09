@@ -15,6 +15,36 @@ export interface Token {
 }
 
 //Break the query into tokens (e.g., keywords, names, brackets, etc.) to make parsing easier.
+
+// How It Works
+//
+// Regex Pattern Explanation:
+// The regex variable defines a pattern to match different parts of the query:
+//
+// - (query|mutation): Matches either 'query' or 'mutation' operation.
+// - ([a-zA-Z_][a-zA-Z0-9_]*): Matches names (e.g., GetUser, user, id).
+// - (\$[a-zA-Z_][a-zA-Z0-9_]*): Matches variables (e.g., $id).
+// - ([\{\}\(\)]): Matches braces '{', '}' or parentheses '(', ')'.
+// - (:): Matches the colon ':'.
+// - (=): Matches the equals sign '='.
+// - (,): Matches the comma ','.
+//
+// Loop Through Matches:
+// - The `while` loop uses `regex.exec(query)` to find all matches in the query.
+// - For each match, it checks which group in the regex matched and creates a token accordingly.
+//
+// Create Tokens:
+// - If match[1] is found, create an 'operation' token (e.g., query).
+// - If match[2] is found, create a 'name' token (e.g., GetUser).
+// - If match[3] is found, create a 'variable' token (e.g., $id).
+// - If match[4] is found, create a 'brace or paren' token (e.g., {, () ).
+// - If match[5] is found, create a 'colon' token (:).
+// - If match[6] is found, create an 'equals' token (=).
+// - If match[7] is found, create a 'comma' token (,).
+//
+// Return Tokens:
+// - The function returns an array of tokens created based on the matches.
+
 export default function tokenize(query: string): Token[] {
   const tokens: Token[] = [];
   const regex =
