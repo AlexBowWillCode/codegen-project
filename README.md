@@ -66,11 +66,3 @@ This enables **validation** against the schema to ensure correctness.
    ```
 
 ---
-
-## 📌 Future Improvements
-
-- ✅ Support for custom GraphQL directives.
-- ✅ More detailed error messages with helpful suggestions.
-- ✅ Improved CLI output for better debugging.
-
-🔹 Contributions are welcome! Feel free to open an **issue** or submit a **pull request**. 🚀
