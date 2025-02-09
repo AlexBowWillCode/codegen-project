@@ -14,6 +14,7 @@ export interface Token {
   value: string;
 }
 
+//Break the query into tokens (e.g., keywords, names, brackets, etc.) to make parsing easier.
 export default function tokenize(query: string): Token[] {
   const tokens: Token[] = [];
   const regex =
