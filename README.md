@@ -80,3 +80,26 @@ Begin by importing the `parse` function from the `graphql/language` module.
 ```javascript
 import { parse } from "graphql/language";
 ```
+
+### 2. Define the GraphQL Query:
+
+Specify the GraphQL query you wish to parse.
+
+```javascript
+const query = `
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      name
+      email
+    }
+  }
+`;
+```
+
+### 3. Parse the Query into an AST:
+
+Use the parse function to convert the query string into an AST.
+
+```javascript
+const ast = parse(query);
+```
