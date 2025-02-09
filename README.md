@@ -1,67 +1,76 @@
-GraphQL Schema Validator
-This project is a TypeScript application that validates .graphql files against a GraphQL API schema. It fetches the schema from a GraphQL endpoint, parses it, and compares it with your .graphql files to ensure they are valid.
+# 🚀 GraphQL Schema Validator
 
-Features
-Fetch a GraphQL schema using a query.
+A **TypeScript application** that validates `.graphql` files against a **GraphQL API schema**. It fetches the schema from a GraphQL endpoint, parses it, and compares it with your `.graphql` files to ensure they are valid.
 
-Parse the schema into a usable TypeScript structure.
+---
 
-Parse .graphql files into an Abstract Syntax Tree (AST).
+## ✨ Features
 
-Validate .graphql files against the schema.
+✅ Fetch a GraphQL schema using an introspection query.\
+✅ Parse the schema into a usable TypeScript structure.\
+🚧 Parse `.graphql` files into an **Abstract Syntax Tree (AST)**.\
+❌ Validate `.graphql` files against the schema.\
+❌ Add error handling and edge cases.\
+❌ Write unit tests for validation logic.\
+❌ Optimize and refactor for better performance.
 
-Progress
-Below is the progress of the project, broken down into stages. Each stage has a progress bar to indicate completion.
+---
 
-1. Fetch the GraphQL Schema
-   Description: Fetch the schema from the GraphQL API using an introspection query.
+## 📊 Project Progress
 
-Status: ✅ Completed
+| Stage                              | Description                                                                | Status         |
+| ---------------------------------- | -------------------------------------------------------------------------- | -------------- |
+| **1. Fetch GraphQL Schema**        | Fetch the schema from the GraphQL API using an introspection query.        | ✅ Completed   |
+| **2. Parse Schema**                | Convert the raw introspection result into a TypeScript-friendly structure. | ✅ Completed   |
+| **3. Parse **``** Files**          | Convert `.graphql` files into an **Abstract Syntax Tree (AST)**.           | 🚧 In Progress |
+| **4. Validate **``** Files**       | Compare parsed `.graphql` files with the schema for validation.            | ❌ Not Started |
+| **5. Error Handling & Edge Cases** | Handle errors (e.g., invalid fields, missing arguments).                   | ❌ Not Started |
+| **6. Unit Tests**                  | Write tests to ensure validation logic works correctly.                    | ❌ Not Started |
+| **7. Optimization & Refactoring**  | Improve performance and code modularity.                                   | ❌ Not Started |
 
-2. Parse the Schema into a Usable Structure
-   Description: Parse the raw introspection result into a TypeScript-friendly structure.
+---
 
-Status: ✅ Completed
+## 📝 Understanding AST Parsing (Stage 3)
 
-3.  Parse .graphql Files
-    Description: Parse .graphql files into an Abstract Syntax Tree (AST) for validation.
+Parsing a `.graphql` file into an **Abstract Syntax Tree (AST)** is crucial for understanding the query structure. Each node in the tree represents a part of the query, such as:
 
-         Converting a .graphql file into an Abstract Syntax Tree (AST) is a crucial step in working with GraphQL queries, mutations, or fragments.
+- **Operation Type** (`query`, `mutation`, etc.)
+- **Field Names** (e.g., `user`, `id`, `name`)
+- **Arguments** (e.g., `id: $id`)
+- **Variables** (e.g., `$id: ID!`)
+- **Fragments**
 
-         Each node in the tree represents a part of the query, such as:
+This enables **validation** against the schema to ensure correctness.
 
-            -The operation type (query, mutation, etc.).
+---
 
-            -Field names (user, id, name, etc.).
+## 🚀 How to Use
 
-            -Arguments (id: $id).
+1. Clone the repository:
 
-            -Variables ($id: ID!).
+   ```sh
+   git clone https://github.com/your-username/graphql-schema-validator.git
+   cd graphql-schema-validator
+   ```
 
-            -Fragments.
+2. Install dependencies:
 
-Status: 🚧 In Progress
+   ```sh
+   npm install
+   ```
 
-4. Validate .graphql Files Against the Schema
-   Description: Compare the parsed .graphql files with the schema to ensure they are valid.
+3. Run the **codegen** command to fetch and validate GraphQL schemas:
 
-Status: ❌ Not Started
+   ```sh
+   npm run codegen
+   ```
 
-5. Add Error Handling and Edge Cases
-   Description: Handle errors and edge cases (e.g., invalid fields, missing arguments).
+---
 
-Status: ❌ Not Started
+## 📌 Future Improvements
 
-6. Write Unit Tests
-   Description: Write unit tests to ensure the validation logic works correctly.
+- ✅ Support for custom GraphQL directives.
+- ✅ More detailed error messages with helpful suggestions.
+- ✅ Improved CLI output for better debugging.
 
-Status: ❌ Not Started
-
-7. Optimize and Refactor
-   Description: Optimize the code for performance and refactor for modularity.
-
-Status: ❌ Not Started
-
-How to use:
-
-Run the codgen command, which runs the main.ts file
+🔹 Contributions are welcome! Feel free to open an **issue** or submit a **pull request**. 🚀
