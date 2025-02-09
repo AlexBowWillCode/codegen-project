@@ -66,3 +66,17 @@ This enables **validation** against the schema to ensure correctness.
    ```
 
 ---
+
+# The graphql feature I am trying to recreate: GraphQL Query to AST Conversion
+
+To convert a GraphQL query into an Abstract Syntax Tree (AST) using tokens, you can utilize the `graphql/language` module from the GraphQL.js library. This module provides functions for lexical analysis and parsing, which are essential for transforming GraphQL source code into an AST.
+
+## Steps to Convert GraphQL Query to AST:
+
+### 1. Import the Required Functions:
+
+Begin by importing the `parse` function from the `graphql/language` module.
+
+```javascript
+import { parse } from "graphql/language";
+```
