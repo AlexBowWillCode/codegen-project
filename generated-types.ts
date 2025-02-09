@@ -1,1 +1,0 @@
-type Event = { id: number; title: string; notes: string | undefined; }
