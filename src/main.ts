@@ -16,6 +16,8 @@ fetchGraphQLSchema().then((introspectionResult) => {
   // Parse the schema
   const schema = parseSchema(introspectionResult);
 
+  console.log("Parsed Schema:", JSON.stringify(schema, null, 2));
+
   // Converting .graphql files to AST so it can be compared with the schema
   const queriesFolderPath = "./src/queries";
   const queryFiles = readdirSync(queriesFolderPath).filter((file) =>
@@ -31,5 +33,19 @@ fetchGraphQLSchema().then((introspectionResult) => {
       `Parsed Query (${queryFile}):`,
       JSON.stringify(parsedQuery, null, 2)
     );
+
+    // Validate the parsed query against the schema
+    const validationErrors = validateQueryAgainstSchema(schema, parsedQuery);
+    if (validationErrors.length > 0) {
+      console.error(`Validation errors in ${queryFile}:`, validationErrors);
+    } else {
+      console.log(`${queryFile} is valid.`);
+    }
   });
+
+  function validateQueryAgainstSchema(schema: any, query: any): string[] {
+    // Implement your validation logic here
+    // This is a placeholder function
+    return [];
+  }
 });

@@ -8,8 +8,8 @@ A **TypeScript application** that validates `.graphql` files against a **GraphQL
 
 ✅ Fetch a GraphQL schema using an introspection query.\
 ✅ Parse the schema into a usable TypeScript structure.\
-🚧 Parse `.graphql` files into an **Abstract Syntax Tree (AST)**.\
-❌ Validate `.graphql` files against the schema.\
+✅ Parse `.graphql` files into an **Abstract Syntax Tree (AST)**.\
+🚧 Validate `.graphql` files against the schema.\
 ❌ Add error handling and edge cases.\
 ❌ Write unit tests for validation logic.\
 ❌ Optimize and refactor for better performance.
@@ -22,8 +22,8 @@ A **TypeScript application** that validates `.graphql` files against a **GraphQL
 | ---------------------------------- | -------------------------------------------------------------------------- | -------------- |
 | **1. Fetch GraphQL Schema**        | Fetch the schema from the GraphQL API using an introspection query.        | ✅ Completed   |
 | **2. Parse Schema**                | Convert the raw introspection result into a TypeScript-friendly structure. | ✅ Completed   |
-| **3. Parse **``** Files**          | Convert `.graphql` files into an **Abstract Syntax Tree (AST)**.           | 🚧 In Progress |
-| **4. Validate **``** Files**       | Compare parsed `.graphql` files with the schema for validation.            | ❌ Not Started |
+| **3. Parse **``** Files**          | Convert `.graphql` files into an **Abstract Syntax Tree (AST)**.           | ✅ Completed   |
+| **4. Validate **``** Files**       | Compare parsed `.graphql` files with the schema for validation.            | 🚧 In Progress |
 | **5. Error Handling & Edge Cases** | Handle errors (e.g., invalid fields, missing arguments).                   | ❌ Not Started |
 | **6. Unit Tests**                  | Write tests to ensure validation logic works correctly.                    | ❌ Not Started |
 | **7. Optimization & Refactoring**  | Improve performance and code modularity.                                   | ❌ Not Started |
