@@ -4,7 +4,6 @@ export type TokenType =
   | "variable"
   | "field"
   | "brace"
-  | "paren"
   | "colon"
   | "equals"
   | "comma";

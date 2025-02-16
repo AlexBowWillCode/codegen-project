@@ -3,5 +3,9 @@ query GetUser($id: ID!) {
     id
     name
     email
+    adress {
+      street
+      city
+    }
   }
 }

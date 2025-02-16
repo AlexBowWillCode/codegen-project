@@ -6,12 +6,13 @@ export interface GraphQLVariable {
 export interface GraphQLArgument {
   name: string;
   value: string;
+  required?: boolean;
 }
 
 export interface GraphQLField2 {
   name: string;
   arguments?: GraphQLArgument[];
-  subFields?: string[];
+  subFields?: GraphQLField2[];
 }
 
 export interface GraphQLQuery {
