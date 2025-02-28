@@ -141,11 +141,12 @@ function resolveFieldType(
   // Step 1: Try to extract type from the type structure
   const typeInfo = extractTypeInfo(typeRef);
 
-  // If we have a concrete type name, look it up in the schema
   if (typeInfo.typeName) {
     const namedType = schema.types.find((t) => t.name === typeInfo.typeName);
     if (namedType) return namedType;
   }
+
+  //Note major refactor needed here was just trying to make it work
 
   // Step 2: For list fields with no item type info, try to infer from field name
   if (typeInfo.isList && !typeInfo.typeName) {
