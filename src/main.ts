@@ -2,50 +2,120 @@ import fetchGraphQLSchema from "./util/fetchGraphqlSchema.ts";
 import parseSchema from "./util/parserFunctions.ts";
 import parseQuery from "./graphqlParsing/parseGraphQL.ts";
 import tokenize from "./graphqlParsing/tokenize.ts";
-import { readFileSync } from "fs";
+import { validateQueryAgainstSchema } from "./validation/validateQueryAgainstSchema.ts";
+import { generateTypeScript } from "./codeGen/typescriptGenerator.ts";
+import { readFileSync, existsSync, writeFileSync } from "fs";
 import { readdirSync } from "fs";
 import { join } from "path";
 
 function readGraphQLFile(filePath: string): string {
-  return readFileSync(filePath, "utf-8");
+  try {
+    return readFileSync(filePath, "utf-8");
+  } catch (error) {
+    console.error(`Error reading file ${filePath}:`, error);
+    return "";
+  }
 }
 
-// Fetch and parse the schema
-console.log("Starting fetchGraphQLSchema...");
-fetchGraphQLSchema().then((introspectionResult) => {
-  // Parse the schema
-  const schema = parseSchema(introspectionResult);
+// Main function
+async function main() {
+  try {
+    console.log("Starting GraphQL schema validation...");
+    console.log("Fetching GraphQL schema...");
+    const introspectionResult = await fetchGraphQLSchema();
 
-  console.log("Parsed Schema:", JSON.stringify(schema, null, 2));
+    console.log("Parsing schema...");
+    const schema = parseSchema(introspectionResult);
 
-  // Converting .graphql files to AST so it can be compared with the schema
-  const queriesFolderPath = "./src/queries";
-  const queryFiles = readdirSync(queriesFolderPath).filter((file) =>
-    file.endsWith(".graphql")
-  );
+    try {
+      writeFileSync("./schema-debug.json", JSON.stringify(schema, null, 2));
+      console.log("Schema cached to schema-debug.json for reference");
+    } catch (error) {
+      console.warn("Could not cache schema:", error);
+    }
 
-  queryFiles.forEach((queryFile) => {
-    const queryFilePath = join(queriesFolderPath, queryFile);
-    const queryContent = readGraphQLFile(queryFilePath);
-    const tokens = tokenize(queryContent);
-    const parsedQuery = parseQuery(tokens);
-    console.log(
-      `Parsed Query (${queryFile}):`,
-      JSON.stringify(parsedQuery, null, 2)
+    const queriesFolderPath = "./src/queries";
+
+    if (!existsSync(queriesFolderPath)) {
+      console.error(`Queries folder not found: ${queriesFolderPath}`);
+      return;
+    }
+
+    const queryFiles = readdirSync(queriesFolderPath).filter((file) =>
+      file.endsWith(".graphql")
     );
 
-    // Validate the parsed query against the schema
-    const validationErrors = validateQueryAgainstSchema(schema, parsedQuery);
-    if (validationErrors.length > 0) {
-      console.error(`Validation errors in ${queryFile}:`, validationErrors);
-    } else {
-      console.log(`${queryFile} is valid.`);
+    if (queryFiles.length === 0) {
+      console.log("No .graphql files found to validate.");
+      return;
     }
-  });
 
-  function validateQueryAgainstSchema(schema: any, query: any): string[] {
-    // Implement your validation logic here
-    // This is a placeholder function
-    return [];
+    console.log(`Found ${queryFiles.length} GraphQL files to validate.`);
+
+    let validCount = 0;
+    let invalidCount = 0;
+
+    const validQueries = new Map();
+
+    for (const queryFile of queryFiles) {
+      try {
+        const queryFilePath = join(queriesFolderPath, queryFile);
+        console.log(`\nProcessing ${queryFile}...`);
+
+        const queryContent = readGraphQLFile(queryFilePath);
+        if (!queryContent) {
+          console.error(`Empty or invalid file: ${queryFile}`);
+          invalidCount++;
+          continue;
+        }
+
+        console.log(`Tokenizing ${queryFile}...`);
+        const tokens = tokenize(queryContent);
+
+        console.log(`Parsing ${queryFile}...`);
+        const parsedQuery = parseQuery(tokens);
+
+        console.log(`Validating ${queryFile}...`);
+        const validationErrors = validateQueryAgainstSchema(
+          schema,
+          parsedQuery
+        );
+
+        if (validationErrors.length > 0) {
+          console.error(`\n❌ Validation errors in ${queryFile}:`);
+          validationErrors.forEach((error, index) => {
+            console.error(`   ${index + 1}. ${error}`);
+          });
+          invalidCount++;
+        } else {
+          console.log(`\n✅ ${queryFile} is valid!`);
+          validQueries.set(queryFile, parsedQuery);
+          validCount++;
+        }
+      } catch (error) {
+        console.error(`\n❌ Error processing ${queryFile}:`, error);
+        invalidCount++;
+      }
+    }
+
+    console.log("\n---- Validation Summary ----");
+    console.log(`Total files: ${queryFiles.length}`);
+    console.log(`Valid: ${validCount}`);
+    console.log(`Invalid: ${invalidCount}`);
+    console.log("---------------------------");
+
+    // Generate TypeScript code if there are valid queries
+    if (validQueries.size > 0) {
+      console.log("\nGenerating TypeScript hooks...");
+      generateTypeScript(schema, validQueries, "./generated");
+      console.log("✅ TypeScript hooks generated in ./generated");
+    } else {
+      console.log("\n❌ No valid queries to generate TypeScript hooks from.");
+    }
+  } catch (error) {
+    console.error("Fatal error:", error);
   }
-});
+}
+
+// Run the main function
+main();

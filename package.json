@@ -2,7 +2,10 @@
   "name": "codegen-project",
   "version": "1.0.0",
   "scripts": {
-    "codegen": "node --loader ts-node/esm src/main.ts"
+    "codegen": "node --loader ts-node/esm src/main.ts",
+    "generate-hooks": "node codegen.js",
+    "build": "tsc",
+    "validate": "node --loader ts-node/esm src/main.ts"
   },
   "devDependencies": {
     "@types/node": "^16.18.125",
@@ -11,6 +14,7 @@
   },
   "type": "module",
   "dependencies": {
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "react-query": "^3.39.3"
   }
 }

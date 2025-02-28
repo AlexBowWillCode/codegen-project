@@ -1,6 +1,6 @@
-# 🚀 GraphQL Schema Validator
+# 🚀 GraphQL Schema Validator and TypeScript Hook Generator
 
-A **TypeScript application** that validates `.graphql` files against a **GraphQL API schema**. It fetches the schema from a GraphQL endpoint, parses it, and compares it with your `.graphql` files to ensure they are valid.
+A **TypeScript application** that validates `.graphql` files against a **GraphQL API schema** and generates type-safe React hooks. It fetches the schema from a GraphQL endpoint, parses it, validates your queries, and generates ready-to-use TypeScript code.
 
 ---
 
@@ -9,10 +9,10 @@ A **TypeScript application** that validates `.graphql` files against a **GraphQL
 ✅ Fetch a GraphQL schema using an introspection query.\
 ✅ Parse the schema into a usable TypeScript structure.\
 ✅ Parse `.graphql` files into an **Abstract Syntax Tree (AST)**.\
-🚧 Validate `.graphql` files against the schema.\
-❌ Add error handling and edge cases.\
-❌ Write unit tests for validation logic.\
-❌ Optimize and refactor for better performance.
+✅ Validate `.graphql` files against the schema.\
+✅ Generate TypeScript type definitions based on GraphQL types.\
+✅ Create React Query hooks for all valid GraphQL operations.\
+✅ Bundle hooks and types into a clean, importable package.
 
 ---
 
@@ -22,25 +22,32 @@ A **TypeScript application** that validates `.graphql` files against a **GraphQL
 | ---------------------------------- | -------------------------------------------------------------------------- | -------------- |
 | **1. Fetch GraphQL Schema**        | Fetch the schema from the GraphQL API using an introspection query.        | ✅ Completed   |
 | **2. Parse Schema**                | Convert the raw introspection result into a TypeScript-friendly structure. | ✅ Completed   |
-| **3. Parse **``** Files**          | Convert `.graphql` files into an **Abstract Syntax Tree (AST)**.           | ✅ Completed   |
-| **4. Validate **``** Files**       | Compare parsed `.graphql` files with the schema for validation.            | 🚧 In Progress |
-| **5. Error Handling & Edge Cases** | Handle errors (e.g., invalid fields, missing arguments).                   | ❌ Not Started |
-| **6. Unit Tests**                  | Write tests to ensure validation logic works correctly.                    | ❌ Not Started |
-| **7. Optimization & Refactoring**  | Improve performance and code modularity.                                   | ❌ Not Started |
+| **3. Parse GraphQL Files**         | Convert `.graphql` files into an **Abstract Syntax Tree (AST)**.           | ✅ Completed   |
+| **4. Validate GraphQL Files**      | Compare parsed `.graphql` files with the schema for validation.            | ✅ Completed   |
+| **5. Generate TypeScript Types**   | Create TypeScript interfaces based on GraphQL types.                       | ✅ Completed   |
+| **6. Create React Query Hooks**    | Generate custom hooks for each validated GraphQL operation.                | ✅ Completed   |
+| **7. Error Handling & Edge Cases** | Handle errors (e.g., invalid fields, missing arguments).                   | ✅ Completed   |
+| **8. Unit Tests**                  | Write tests to ensure validation logic works correctly.                    | ❌ Not Started |
+| **9. Optimization & Refactoring**  | Improve performance and code modularity.                                   | 🚧 In Progress |
 
 ---
 
-## 📝 Understanding AST Parsing (Stage 3)
+## 📝 Understanding the Process
 
-Parsing a `.graphql` file into an **Abstract Syntax Tree (AST)** is crucial for understanding the query structure. Each node in the tree represents a part of the query, such as:
+1. **Schema Fetching**: The application starts by fetching the GraphQL schema using an introspection query.
 
-- **Operation Type** (`query`, `mutation`, etc.)
-- **Field Names** (e.g., `user`, `id`, `name`)
-- **Arguments** (e.g., `id: $id`)
-- **Variables** (e.g., `$id: ID!`)
-- **Fragments**
+2. **Query Parsing**: Your `.graphql` files are parsed into an Abstract Syntax Tree (AST) structure that represents:
 
-This enables **validation** against the schema to ensure correctness.
+   - Operation types (`query`, `mutation`, etc.)
+   - Field names, arguments, and variables
+   - Nested field structure
+
+3. **Validation**: Parsed queries are validated against the schema to ensure they're correct.
+
+4. **Code Generation**: For valid queries, the application generates:
+   - TypeScript interfaces for request variables and response data
+   - React Query hooks that provide loading, error, and data states
+   - A simple GraphQL client implementation that you can customize
 
 ---
 
@@ -59,47 +66,102 @@ This enables **validation** against the schema to ensure correctness.
    npm install
    ```
 
-3. Run the **codegen** command to fetch and validate GraphQL schemas:
+3. Add your GraphQL queries to the `src/queries` folder with `.graphql` extension.
+
+4. Run the code generator:
 
    ```sh
-   npm run codegen
+   npm run generate-hooks
+   ```
+
+5. Use the generated hooks in your React application:
+
+   ```typescript
+   import { useGetUser } from "./generated";
+
+   function UserProfile({ userId }) {
+     const { data, isLoading, error } = useGetUser({ id: userId });
+
+     if (isLoading) return <div>Loading...</div>;
+     if (error) return <div>Error: {error.message}</div>;
+
+     return <div>Name: {data.user.name}</div>;
+   }
    ```
 
 ---
 
-# The graphql feature I am trying to recreate: GraphQL Query to AST Conversion
+## 🛠️ Generated Code Structure
 
-To convert a GraphQL query into an Abstract Syntax Tree (AST) using tokens, you can utilize the `graphql/language` module from the GraphQL.js library. This module provides functions for lexical analysis and parsing, which are essential for transforming GraphQL source code into an AST.
+After running the code generator, you'll have:
 
-## Steps to Convert GraphQL Query to AST:
-
-### 1. Import the Required Functions:
-
-Begin by importing the `parse` function from the `graphql/language` module.
-
-```javascript
-import { parse } from "graphql/language";
+```
+generated/
+├── hooks/
+│   ├── useQueryName1.ts
+│   ├── useQueryName2.ts
+│   └── ...
+├── types.ts
+├── graphqlClient.ts
+└── index.ts
 ```
 
-### 2. Define the GraphQL Query:
+- **hooks/**: Contains individual hook files for each query
+- **types.ts**: Contains TypeScript interfaces for all operations
+- **graphqlClient.ts**: A customizable GraphQL client
+- **index.ts**: Exports all hooks and types for easy importing
 
-Specify the GraphQL query you wish to parse.
+---
 
-```javascript
-const query = `
-  query GetUser($id: ID!) {
-    user(id: $id) {
-      name
-      email
-    }
+## 🔄 GraphQL Query to TypeScript Hook Example
+
+Starting with a GraphQL query:
+
+```graphql
+query GetUser($id: ID!) {
+  user(id: $id) {
+    name
+    email
   }
-`;
+}
 ```
 
-### 3. Parse the Query into an AST:
+The generator produces:
 
-Use the parse function to convert the query string into an AST.
+```typescript
+// TypeScript interface for variables
+export interface GetUserVariables {
+  id: string;
+}
 
-```javascript
-const ast = parse(query);
+// TypeScript interface for response
+export interface GetUserResponse {
+  user: {
+    name: string;
+    email: string;
+  };
+}
+
+// React Query hook
+export const useGetUser = (
+  variables: GetUserVariables,
+  options?: UseQueryOptions<GetUserResponse, Error>
+) => {
+  return useQuery<GetUserResponse, Error>(
+    ["GetUser", variables],
+    () => graphqlRequest<GetUserResponse, GetUserVariables>(QUERY, variables),
+    options
+  );
+};
 ```
+
+This gives you fully type-safe access to your GraphQL API with minimal boilerplate code.
+
+---
+
+## 🚀 Next Steps
+
+- Add support for GraphQL fragments
+- Generate mutation hooks with optimistic updates
+- Add watch mode for continuous generation
+- Implement unit and integration tests

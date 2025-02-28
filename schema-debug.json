@@ -1,0 +1,813 @@
+{
+  "types": [
+    {
+      "kind": "SCALAR",
+      "name": "Boolean"
+    },
+    {
+      "kind": "OBJECT",
+      "name": "Continent",
+      "fields": [
+        {
+          "name": "code",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "ID"
+            }
+          }
+        },
+        {
+          "name": "countries",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "name",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "INPUT_OBJECT",
+      "name": "ContinentFilterInput"
+    },
+    {
+      "kind": "OBJECT",
+      "name": "Country",
+      "fields": [
+        {
+          "name": "awsRegion",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "capital",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "code",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "ID"
+            }
+          }
+        },
+        {
+          "name": "continent",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "OBJECT",
+              "name": "Continent"
+            }
+          }
+        },
+        {
+          "name": "currencies",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "currency",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "emoji",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "emojiU",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "languages",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "name",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "native",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "phone",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "phones",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "states",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "subdivisions",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "INPUT_OBJECT",
+      "name": "CountryFilterInput"
+    },
+    {
+      "kind": "SCALAR",
+      "name": "Float"
+    },
+    {
+      "kind": "SCALAR",
+      "name": "ID"
+    },
+    {
+      "kind": "SCALAR",
+      "name": "Int"
+    },
+    {
+      "kind": "OBJECT",
+      "name": "Language",
+      "fields": [
+        {
+          "name": "code",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "ID"
+            }
+          }
+        },
+        {
+          "name": "name",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "native",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "rtl",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "Boolean"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "INPUT_OBJECT",
+      "name": "LanguageFilterInput"
+    },
+    {
+      "kind": "OBJECT",
+      "name": "Query",
+      "fields": [
+        {
+          "name": "continent",
+          "type": {
+            "kind": "OBJECT",
+            "name": "Continent"
+          }
+        },
+        {
+          "name": "continents",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "countries",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "country",
+          "type": {
+            "kind": "OBJECT",
+            "name": "Country"
+          }
+        },
+        {
+          "name": "language",
+          "type": {
+            "kind": "OBJECT",
+            "name": "Language"
+          }
+        },
+        {
+          "name": "languages",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "OBJECT",
+      "name": "State",
+      "fields": [
+        {
+          "name": "code",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "country",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "OBJECT",
+              "name": "Country"
+            }
+          }
+        },
+        {
+          "name": "name",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "SCALAR",
+      "name": "String"
+    },
+    {
+      "kind": "INPUT_OBJECT",
+      "name": "StringQueryOperatorInput"
+    },
+    {
+      "kind": "OBJECT",
+      "name": "Subdivision",
+      "fields": [
+        {
+          "name": "code",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "ID"
+            }
+          }
+        },
+        {
+          "name": "emoji",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "name",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "OBJECT",
+      "name": "__Directive",
+      "fields": [
+        {
+          "name": "name",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "description",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "isRepeatable",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "locations",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "args",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "ENUM",
+      "name": "__DirectiveLocation"
+    },
+    {
+      "kind": "OBJECT",
+      "name": "__EnumValue",
+      "fields": [
+        {
+          "name": "name",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "description",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "isDeprecated",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "deprecationReason",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "OBJECT",
+      "name": "__Field",
+      "fields": [
+        {
+          "name": "name",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "description",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "args",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "type",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "OBJECT",
+              "name": "__Type"
+            }
+          }
+        },
+        {
+          "name": "isDeprecated",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "deprecationReason",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "OBJECT",
+      "name": "__InputValue",
+      "fields": [
+        {
+          "name": "name",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "description",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "type",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "OBJECT",
+              "name": "__Type"
+            }
+          }
+        },
+        {
+          "name": "defaultValue",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "isDeprecated",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "deprecationReason",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "OBJECT",
+      "name": "__Schema",
+      "fields": [
+        {
+          "name": "description",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "types",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "queryType",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "OBJECT",
+              "name": "__Type"
+            }
+          }
+        },
+        {
+          "name": "mutationType",
+          "type": {
+            "kind": "OBJECT",
+            "name": "__Type"
+          }
+        },
+        {
+          "name": "subscriptionType",
+          "type": {
+            "kind": "OBJECT",
+            "name": "__Type"
+          }
+        },
+        {
+          "name": "directives",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "LIST",
+              "name": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "OBJECT",
+      "name": "__Type",
+      "fields": [
+        {
+          "name": "kind",
+          "type": {
+            "kind": "NON_NULL",
+            "name": null,
+            "ofType": {
+              "kind": "ENUM",
+              "name": "__TypeKind"
+            }
+          }
+        },
+        {
+          "name": "name",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "description",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "specifiedByURL",
+          "type": {
+            "kind": "SCALAR",
+            "name": "String"
+          }
+        },
+        {
+          "name": "fields",
+          "type": {
+            "kind": "LIST",
+            "name": null,
+            "ofType": {
+              "kind": "NON_NULL",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "interfaces",
+          "type": {
+            "kind": "LIST",
+            "name": null,
+            "ofType": {
+              "kind": "NON_NULL",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "possibleTypes",
+          "type": {
+            "kind": "LIST",
+            "name": null,
+            "ofType": {
+              "kind": "NON_NULL",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "enumValues",
+          "type": {
+            "kind": "LIST",
+            "name": null,
+            "ofType": {
+              "kind": "NON_NULL",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "inputFields",
+          "type": {
+            "kind": "LIST",
+            "name": null,
+            "ofType": {
+              "kind": "NON_NULL",
+              "name": null
+            }
+          }
+        },
+        {
+          "name": "ofType",
+          "type": {
+            "kind": "OBJECT",
+            "name": "__Type"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "ENUM",
+      "name": "__TypeKind"
+    }
+  ]
+}
