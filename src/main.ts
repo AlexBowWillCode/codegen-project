@@ -18,7 +18,7 @@ function readGraphQLFile(filePath: string): string {
 }
 
 // Main function
-async function main() {
+export async function main() {
   try {
     console.log("Starting GraphQL schema validation...");
     console.log("Fetching GraphQL schema...");
