@@ -1,4 +1,7 @@
-export const mockSchema = {
+// src/__tests__/__mocks__/mockSchema.ts
+import { GraphQLSchema } from "../../types/types";
+
+export const mockSchema: GraphQLSchema = {
   types: [
     {
       kind: "OBJECT",
@@ -39,10 +42,37 @@ export const mockSchema = {
         },
       ],
     },
+    {
+      kind: "SCALAR",
+      name: "String",
+      fields: [],
+    },
+    {
+      kind: "SCALAR",
+      name: "ID",
+      fields: [],
+    },
   ],
 };
 
-// src/__tests__/__mocks__/mockTokens.ts
+// Also add the mock parsed query here to ensure they're aligned
+export const mockParsedQuery = {
+  operation: "query",
+  name: "GetCountry",
+  variables: [{ name: "code", type: "ID!" }],
+  fields: [
+    {
+      name: "country",
+      arguments: [{ name: "code", value: "code" }],
+      subFields: [
+        { name: "name", arguments: [], subFields: [] },
+        { name: "capital", arguments: [], subFields: [] },
+      ],
+    },
+  ],
+};
+
+// Mock tokens for a simple GetCountry query
 export const mockTokens = [
   { type: "operation", value: "query" },
   { type: "name", value: "GetCountry" },
@@ -64,20 +94,3 @@ export const mockTokens = [
   { type: "brace", value: "}" },
   { type: "brace", value: "}" },
 ];
-
-// src/__tests__/__mocks__/mockQueries.ts
-export const mockParsedQuery = {
-  operation: "query",
-  name: "GetCountry",
-  variables: [{ name: "code", type: "ID!" }],
-  fields: [
-    {
-      name: "country",
-      arguments: [{ name: "code", value: "code" }],
-      subFields: [
-        { name: "name", arguments: [], subFields: [] },
-        { name: "capital", arguments: [], subFields: [] },
-      ],
-    },
-  ],
-};

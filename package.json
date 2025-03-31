@@ -1,14 +1,49 @@
 {
-  "name": "codegen-project",
-  "version": "1.0.0",
+  "name": "graphql-codegen-ts",
+  "version": "0.1.0",
+  "description": "GraphQL Schema Validator and TypeScript Hook Generator",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "graphql-codegen-ts": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
-    "codegen": "node --loader ts-node/esm src/main.ts",
-    "generate-hooks": "node codegen.js",
     "build": "tsc",
-    "validate": "node --loader ts-node/esm src/main.ts",
+    "prepublishOnly": "npm run build",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "validate": "ts-node src/cli.ts validate",
+    "generate": "ts-node src/cli.ts generate"
+  },
+  "keywords": [
+    "graphql",
+    "typescript",
+    "codegen",
+    "schema",
+    "validation",
+    "react-query",
+    "hooks"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/graphql-codegen-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/graphql-codegen-ts/issues"
+  },
+  "homepage": "https://github.com/yourusername/graphql-codegen-ts#readme",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "glob": "^10.4.5",
+    "node-fetch": "^3.3.2",
+    "react-query": "^3.39.3"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -19,9 +54,5 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },
-  "type": "module",
-  "dependencies": {
-    "node-fetch": "^3.3.2",
-    "react-query": "^3.39.3"
-  }
+  "type": "module"
 }

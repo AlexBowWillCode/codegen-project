@@ -1,11 +1,11 @@
 import {
+  GraphQLField2,
+  GraphQLQuery,
   GraphQLSchema,
   GraphQLType,
   GraphQLTypeRef,
-  GraphQLQuery,
-  GraphQLField2,
   GraphQLVariable,
-} from "../types/types.ts";
+} from "../types/types.js";
 
 export function validateQueryAgainstSchema(
   schema: GraphQLSchema,
@@ -45,6 +45,10 @@ export function validateQueryAgainstSchema(
   return errors;
 }
 
+// This is a specific fix for validateQueryAgainstSchema.ts
+// Let's add a part that needs to be modified to fix the validation issue:
+
+// Inside the validateField function, look for this code:
 function validateField(
   field: GraphQLField2,
   parentType: GraphQLType,
@@ -64,6 +68,10 @@ function validateField(
     );
     return;
   }
+
+  // Fix: Make sure we properly handle fields with no subfields
+  // If field.subFields is undefined, treat it as an empty array
+  field.subFields = field.subFields || [];
 
   // Validate arguments if they exist
   if (field.arguments && field.arguments.length > 0) {
@@ -111,21 +119,6 @@ function validateField(
         currentPath
       );
     });
-  } else if (field.subFields === undefined || field.subFields.length === 0) {
-    // Check if this field is an object type that requires subfields
-    const fieldType = resolveFieldType(schema, schemaField.type, field.name);
-
-    if (
-      fieldType &&
-      (fieldType.kind === "OBJECT" ||
-        fieldType.kind === "INTERFACE" ||
-        fieldType.kind === "UNION") &&
-      fieldType.fields &&
-      fieldType.fields.length > 0
-    ) {
-      // Object types should have subfields selected (optional warning)
-      // errors.push(`Field '${field.name}' at ${currentPath} is of object type '${fieldType.name}' and should have subfields selected`);
-    }
   }
 }
 

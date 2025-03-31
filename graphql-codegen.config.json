@@ -1,0 +1,21 @@
+{
+  "endpoint": "https://api.example.com/graphql",
+  "queriesPath": "./src/queries",
+  "outputPath": "./generated",
+  "hooks": {
+    "framework": "react-query",
+    "version": "v3",
+    "customImports": ["import { useQueryClient } from 'react-query';"]
+  },
+  "typescript": {
+    "strictNullChecks": true,
+    "enumsAsTypes": false
+  },
+  "headers": {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "X-Custom-Header": "Custom-Value"
+  },
+  "introspection": {
+    "customQuery": null
+  }
+}

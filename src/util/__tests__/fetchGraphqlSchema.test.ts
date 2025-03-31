@@ -1,59 +1,28 @@
+// Modified fetchGraphqlSchema.test.ts
+import fetchGraphQLSchema from "../fetchGraphqlSchema";
 import { endpoint, introspectionQuery } from "../../const/constants";
 
-// Mock the fetch implementation
-const mockFetch = jest.fn();
-global.fetch = mockFetch;
-
-// Mock the original module
-jest.mock("../../util/fetchGraphqlSchema", () => {
-  // Import the actual implementation
-  const originalModule = jest.requireActual("../../util/fetchGraphqlSchema");
-
-  // Create our modified version
-  return {
-    ...originalModule,
-    default: async function fetchGraphQLSchema() {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: introspectionQuery,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (result.errors) {
-        throw new Error(
-          `GraphQL Error: ${JSON.stringify(result.errors, null, 2)}`
-        );
-      }
-
-      return result.data.__schema;
-    },
-  };
+// Mock node-fetch properly without directly importing it
+jest.mock("node-fetch", () => {
+  return jest.fn().mockImplementation(() => {
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ data: { __schema: { types: [] } } }),
+    });
+  });
 });
-
-// Now import and test the mocked version
-import fetchGraphQLSchema from "../../util/fetchGraphqlSchema";
 
 describe("fetchGraphQLSchema", () => {
   beforeEach(() => {
     // Reset mock before each test
-    mockFetch.mockReset();
+    jest.clearAllMocks();
   });
 
   test("should fetch and return a GraphQL schema", async () => {
     // Setup mock to return successful response
     const mockSchema = { data: { __schema: { types: [] } } };
 
+    const mockFetch = require("node-fetch");
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockSchema,
@@ -79,6 +48,7 @@ describe("fetchGraphQLSchema", () => {
 
   test("should throw error for network failure", async () => {
     // Setup mock to simulate HTTP error
+    const mockFetch = require("node-fetch");
     mockFetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
@@ -92,12 +62,15 @@ describe("fetchGraphQLSchema", () => {
 
   test("should throw error for GraphQL errors", async () => {
     // Setup mock to return GraphQL errors
-    mockFetch.mockResolvedValueOnce({
+    const mockResponse = {
       ok: true,
       json: async () => ({
         errors: [{ message: "Field not found" }],
       }),
-    });
+    };
+
+    const mockFetch = require("node-fetch");
+    mockFetch.mockResolvedValueOnce(mockResponse);
 
     // Check that the function throws an error
     await expect(fetchGraphQLSchema()).rejects.toThrow("GraphQL Error:");

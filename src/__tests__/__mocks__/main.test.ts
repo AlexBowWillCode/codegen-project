@@ -1,23 +1,22 @@
-// src/__tests__/main.test.ts
-
-import { main } from "../../main";
+// src/__tests__/main.test.ts (moved from __mocks__ folder)
 
 // Mock all the imported modules
-jest.mock("../../util/fetchGraphqlSchema", () => {
-  return { default: jest.fn().mockResolvedValue({ types: [] }) };
+jest.mock("../util/fetchGraphqlSchema", () => {
+  return jest.fn().mockResolvedValue({ types: [] });
 });
 
-jest.mock("../../util/parserFunctions", () => {
+jest.mock("../util/parserFunctions", () => {
   return {
     default: jest.fn().mockReturnValue({ types: [] }),
   };
 });
 
-jest.mock("../../graphqlParsing/tokenize", () => {
+jest.mock("../graphqlParsing/tokenize", () => {
   return {
     default: jest.fn().mockReturnValue([]),
   };
 });
+
 jest.mock("../graphqlParsing/parseGraphQL", () => {
   return {
     default: jest.fn().mockReturnValue({

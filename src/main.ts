@@ -1,56 +1,79 @@
-import fetchGraphQLSchema from "./util/fetchGraphqlSchema.ts";
-import parseSchema from "./util/parserFunctions.ts";
-import parseQuery from "./graphqlParsing/parseGraphQL.ts";
-import tokenize from "./graphqlParsing/tokenize.ts";
-import { validateQueryAgainstSchema } from "./validation/validateQueryAgainstSchema.ts";
-import { generateTypeScript } from "./codeGen/typescriptGenerator.ts";
-import { readFileSync, existsSync, writeFileSync } from "fs";
+import fetchGraphQLSchema from "./util/fetchGraphqlSchema.js";
+import parseSchema from "./util/parserFunctions.js";
+import parseQuery from "./graphqlParsing/parseGraphQL.js";
+import tokenize from "./graphqlParsing/tokenize.js";
+import { validateQueryAgainstSchema } from "./validation/validateQueryAgainstSchema.js";
+import { generateTypeScript } from "./codeGen/typescriptGenerator.js";
+import { readFileSync, existsSync, writeFileSync, mkdirSync } from "fs";
 import { readdirSync } from "fs";
-import { join } from "path";
+import { join, dirname } from "path";
+import chalk from "chalk";
+import { glob } from "glob";
 
 function readGraphQLFile(filePath: string): string {
   try {
     return readFileSync(filePath, "utf-8");
   } catch (error) {
-    console.error(`Error reading file ${filePath}:`, error);
+    console.error(`${chalk.red("Error reading file")} ${filePath}:`, error);
     return "";
   }
 }
 
-// Main function
-export async function main() {
+interface ProcessOptions {
+  endpoint: string;
+  queriesPath: string;
+  outputPath?: string;
+  generateCode: boolean;
+  introspectionQuery?: string;
+}
+
+// Main function that processes GraphQL files
+export async function processGraphQLFiles(options: ProcessOptions) {
   try {
-    console.log("Starting GraphQL schema validation...");
-    console.log("Fetching GraphQL schema...");
-    const introspectionResult = await fetchGraphQLSchema();
+    const {
+      endpoint,
+      queriesPath,
+      outputPath = "./generated",
+      generateCode,
+      introspectionQuery,
+    } = options;
 
-    console.log("Parsing schema...");
-    const schema = parseSchema(introspectionResult);
-
-    try {
-      writeFileSync("./schema-debug.json", JSON.stringify(schema, null, 2));
-      console.log("Schema cached to schema-debug.json for reference");
-    } catch (error) {
-      console.warn("Could not cache schema:", error);
-    }
-
-    const queriesFolderPath = "./src/queries";
-
-    if (!existsSync(queriesFolderPath)) {
-      console.error(`Queries folder not found: ${queriesFolderPath}`);
-      return;
-    }
-
-    const queryFiles = readdirSync(queriesFolderPath).filter((file) =>
-      file.endsWith(".graphql")
+    console.log(
+      chalk.blue("Fetching GraphQL schema from"),
+      chalk.green(endpoint)
     );
 
-    if (queryFiles.length === 0) {
-      console.log("No .graphql files found to validate.");
-      return;
+    // Use the provided introspection query or the default one
+    const schemaResult = await fetchGraphQLSchema(endpoint, introspectionQuery);
+
+    console.log(chalk.blue("Parsing schema..."));
+    const schema = parseSchema(schemaResult);
+
+    // Cache schema for debugging if needed
+    try {
+      const schemaCacheDir = dirname("./schema-debug.json");
+      if (!existsSync(schemaCacheDir)) {
+        mkdirSync(schemaCacheDir, { recursive: true });
+      }
+      writeFileSync("./schema-debug.json", JSON.stringify(schema, null, 2));
+      console.log(
+        chalk.gray("Schema cached to schema-debug.json for reference")
+      );
+    } catch (error) {
+      console.warn(chalk.yellow("Could not cache schema:"), error);
     }
 
-    console.log(`Found ${queryFiles.length} GraphQL files to validate.`);
+    // Find all .graphql files in the specified directory
+    const queryFiles = glob.sync(`${queriesPath}/**/*.graphql`);
+
+    if (queryFiles.length === 0) {
+      console.log(chalk.yellow(`No .graphql files found in ${queriesPath}`));
+      return { validCount: 0, invalidCount: 0, validQueries: new Map() };
+    }
+
+    console.log(
+      chalk.blue(`Found ${queryFiles.length} GraphQL files to validate.`)
+    );
 
     let validCount = 0;
     let invalidCount = 0;
@@ -59,63 +82,82 @@ export async function main() {
 
     for (const queryFile of queryFiles) {
       try {
-        const queryFilePath = join(queriesFolderPath, queryFile);
-        console.log(`\nProcessing ${queryFile}...`);
+        console.log(`\nProcessing ${chalk.cyan(queryFile)}...`);
 
-        const queryContent = readGraphQLFile(queryFilePath);
+        const queryContent = readGraphQLFile(queryFile);
         if (!queryContent) {
-          console.error(`Empty or invalid file: ${queryFile}`);
+          console.error(chalk.red(`Empty or invalid file: ${queryFile}`));
           invalidCount++;
           continue;
         }
 
-        console.log(`Tokenizing ${queryFile}...`);
+        console.log(`Tokenizing ${chalk.cyan(queryFile)}...`);
         const tokens = tokenize(queryContent);
 
-        console.log(`Parsing ${queryFile}...`);
+        console.log(`Parsing ${chalk.cyan(queryFile)}...`);
         const parsedQuery = parseQuery(tokens);
 
-        console.log(`Validating ${queryFile}...`);
+        console.log(`Validating ${chalk.cyan(queryFile)}...`);
         const validationErrors = validateQueryAgainstSchema(
           schema,
           parsedQuery
         );
 
         if (validationErrors.length > 0) {
-          console.error(`\n❌ Validation errors in ${queryFile}:`);
+          console.error(
+            `\n${chalk.red("❌")} Validation errors in ${queryFile}:`
+          );
           validationErrors.forEach((error, index) => {
             console.error(`   ${index + 1}. ${error}`);
           });
           invalidCount++;
         } else {
-          console.log(`\n✅ ${queryFile} is valid!`);
+          console.log(`\n${chalk.green("✅")} ${queryFile} is valid!`);
           validQueries.set(queryFile, parsedQuery);
           validCount++;
         }
       } catch (error) {
-        console.error(`\n❌ Error processing ${queryFile}:`, error);
+        console.error(
+          `\n${chalk.red("❌")} Error processing ${queryFile}:`,
+          error
+        );
         invalidCount++;
       }
     }
 
     console.log("\n---- Validation Summary ----");
-    console.log(`Total files: ${queryFiles.length}`);
-    console.log(`Valid: ${validCount}`);
-    console.log(`Invalid: ${invalidCount}`);
+    console.log(`Total files: ${chalk.blue(queryFiles.length)}`);
+    console.log(`Valid: ${chalk.green(validCount)}`);
+    console.log(`Invalid: ${chalk.red(invalidCount)}`);
     console.log("---------------------------");
 
-    // Generate TypeScript code if there are valid queries
-    if (validQueries.size > 0) {
-      console.log("\nGenerating TypeScript hooks...");
-      generateTypeScript(schema, validQueries, "./generated");
-      console.log("✅ TypeScript hooks generated in ./generated");
-    } else {
-      console.log("\n❌ No valid queries to generate TypeScript hooks from.");
+    // Generate TypeScript code if there are valid queries and generateCode is true
+    if (validQueries.size > 0 && generateCode) {
+      console.log(`\n${chalk.blue("Generating TypeScript hooks...")}`);
+      generateTypeScript(schema, validQueries, outputPath);
+      console.log(
+        `${chalk.green("✅")} TypeScript hooks generated in ${outputPath}`
+      );
+    } else if (generateCode) {
+      console.log(
+        `\n${chalk.yellow(
+          "⚠"
+        )} No valid queries to generate TypeScript hooks from.`
+      );
     }
+
+    return { validCount, invalidCount, validQueries };
   } catch (error) {
-    console.error("Fatal error:", error);
+    console.error(chalk.red("Fatal error:"), error);
+    throw error;
   }
 }
 
-// Run the main function
-main();
+export {
+  fetchGraphQLSchema,
+  parseSchema,
+  parseQuery,
+  tokenize,
+  validateQueryAgainstSchema,
+  generateTypeScript,
+};

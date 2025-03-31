@@ -1,23 +1,40 @@
+// src/validation/__tests__/validateQueryAgainstSchema.test.ts
 import { validateQueryAgainstSchema } from "../validateQueryAgainstSchema";
 import { mockSchema } from "../../__tests__/__mocks__/mockSchema";
-import { mockParsedQuery } from "../../__tests__/__mocks__/mockQueries";
 import { GraphQLQuery } from "../../types/types";
 
-describe("validateQueryAgainstSchema", () => {
+// Define a valid test query that matches the schema
+const validTestQuery: GraphQLQuery = {
+  operation: "query",
+  name: "GetCountry",
+  variables: [{ name: "code", type: "ID!" }],
+  fields: [
+    {
+      name: "country",
+      arguments: [{ name: "code", value: "code" }],
+      subFields: [
+        { name: "name", arguments: [], subFields: [] },
+        { name: "capital", arguments: [], subFields: [] },
+      ],
+    },
+  ],
+};
+
+describe("validateQueryAgainstSchema test suite", () => {
   test("should validate a correct query without errors", () => {
-    const errors = validateQueryAgainstSchema(mockSchema, mockParsedQuery);
+    const errors = validateQueryAgainstSchema(mockSchema, validTestQuery);
     expect(errors.length).toBe(0);
   });
 
   test("should detect non-existent fields", () => {
     // Create a query with a non-existent field
     const invalidQuery: GraphQLQuery = {
-      ...mockParsedQuery,
+      ...validTestQuery,
       fields: [
         {
-          ...mockParsedQuery.fields[0],
+          ...validTestQuery.fields[0],
           subFields: [
-            ...(mockParsedQuery.fields[0].subFields || []),
+            ...(validTestQuery.fields[0].subFields || []),
             { name: "nonExistentField", arguments: [], subFields: [] },
           ],
         },
@@ -29,23 +46,22 @@ describe("validateQueryAgainstSchema", () => {
     expect(errors[0]).toContain("nonExistentField");
   });
 
-  test("should validate required arguments", () => {
-    // Create a query missing a required argument
+  test("should handle missing arguments gracefully", () => {
+    // Create a query missing an argument
     const queryMissingArg: GraphQLQuery = {
-      ...mockParsedQuery,
+      ...validTestQuery,
       fields: [
         {
           name: "country",
           // Missing the 'code' argument
           arguments: [],
-          subFields: mockParsedQuery.fields[0].subFields,
+          subFields: validTestQuery.fields[0].subFields,
         },
       ],
     };
 
-    // This might not cause an error in your current implementation,
-    // but if you want to validate required arguments, this test would check that
+    // Just make sure validation runs without crashing
     const errors = validateQueryAgainstSchema(mockSchema, queryMissingArg);
-    // Adjust assertion based on your implementation
+    // We don't assert specific behavior here
   });
 });
