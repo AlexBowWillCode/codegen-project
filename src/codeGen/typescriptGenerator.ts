@@ -1,16 +1,10 @@
-import {
-  GraphQLSchema,
-  GraphQLType,
-  GraphQLField,
-  GraphQLQuery,
-} from "../types/types.ts";
+import { writeFileSync, mkdirSync, existsSync } from "fs";
+import { join, dirname } from "path";
+import { GraphQLQuery, GraphQLSchema } from "../types/types.js";
 import {
   mapFieldToTypeScript,
   mapGraphQLTypeStringToTypeScript,
-  resolveTypeReference,
-} from "./typeMapper.ts";
-import { writeFileSync, mkdirSync, existsSync } from "fs";
-import { join, dirname } from "path";
+} from "./typeMapper.js";
 
 /**
  * Generates TypeScript hooks and types for GraphQL queries

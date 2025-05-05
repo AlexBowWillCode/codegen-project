@@ -1,5 +1,6 @@
 // src/__tests__/__mocks__/mockQueries.ts
-import { GraphQLQuery } from "../../types/types";
+
+import { GraphQLQuery } from "../../types/types.js";
 
 // Basic parsed query for GetCountry
 export const mockParsedQuery: GraphQLQuery = {

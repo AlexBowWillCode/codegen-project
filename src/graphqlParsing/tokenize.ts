@@ -1,4 +1,4 @@
-import { Token, TokenType } from "../types/types.ts";
+import { Token } from "../types/types.js";
 
 export default function tokenize(query: string): Token[] {
   const tokens: Token[] = [];

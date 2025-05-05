@@ -8,6 +8,8 @@ export const graphqlRequest = async <T, V>(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      // Add authentication headers here if needed
+      // Example: 'Authorization': `Bearer ${yourAuthToken}`
     },
     body: JSON.stringify({
       query,

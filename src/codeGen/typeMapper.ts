@@ -1,9 +1,9 @@
 import {
+  GraphQLField2,
   GraphQLSchema,
   GraphQLType,
   GraphQLTypeRef,
-  GraphQLField2,
-} from "../types/types.ts";
+} from "../types/types.js";
 
 /**
  * Maps a GraphQL field to a TypeScript type

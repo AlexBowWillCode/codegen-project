@@ -1,5 +1,4 @@
-// src/__tests__/__mocks__/mockTokens.ts
-import { Token } from "../../types/types";
+import { Token } from "../../types/types.js";
 
 // Mock tokens for a simple GetCountry query
 export const mockTokens: Token[] = [

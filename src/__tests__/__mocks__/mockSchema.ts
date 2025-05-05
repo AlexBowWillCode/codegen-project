@@ -1,5 +1,4 @@
-// src/__tests__/__mocks__/mockSchema.ts
-import { GraphQLSchema } from "../../types/types";
+import { GraphQLSchema } from "../../types/types.js";
 
 export const mockSchema: GraphQLSchema = {
   types: [
@@ -12,7 +11,7 @@ export const mockSchema: GraphQLSchema = {
           type: {
             kind: "OBJECT",
             name: "Country",
-            ofType: null,
+            ofType: undefined,
           },
         },
       ],
@@ -37,7 +36,7 @@ export const mockSchema: GraphQLSchema = {
           type: {
             kind: "SCALAR",
             name: "String",
-            ofType: null,
+            ofType: undefined,
           },
         },
       ],

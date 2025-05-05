@@ -1,4 +1,4 @@
-import { GraphQLSchema, GraphQLTypeRef } from "../types/types.ts";
+import { GraphQLSchema, GraphQLTypeRef } from "../types/types.js";
 
 export default function parseSchema(introspectionResult: any): GraphQLSchema {
   const schema: GraphQLSchema = {

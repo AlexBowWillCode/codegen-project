@@ -1,0 +1,2 @@
+export declare const introspectionQuery = "\n  query IntrospectionQuery {\n    __schema {\n      types {\n        kind\n        name\n        fields {\n          name\n          type {\n            name\n            kind\n            ofType {\n              name\n              kind\n            }\n          }\n        }\n      }\n    }\n  }\n";
+export declare const endpoint = "YOUR_GRAPHQL_ENDPOINT";

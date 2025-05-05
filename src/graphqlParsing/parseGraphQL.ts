@@ -1,3 +1,5 @@
+//Convert the tokens into a structured GraphQLQuery object.
+
 import {
   GraphQLArgument,
   GraphQLField2,
@@ -5,9 +7,7 @@ import {
   GraphQLVariable,
   Token,
   TokenType,
-} from "../types/types.ts";
-
-//Convert the tokens into a structured GraphQLQuery object.
+} from "../types/types.js";
 
 export default function parseQuery(tokens: Token[]): GraphQLQuery {
   let index = 0;
